@@ -1,11 +1,20 @@
-node {
-    stage('Clone repository') {
-        checkout scm
+pipeline {
+	agent none  stages {
+  	stage('Maven Install') {
+    	agent {
+      	docker {
+        	image 'maven:3.5.0'
+        }
+      }
+      steps {
+      	sh 'mvn clean install'
+      }
     }
-    stage('Build image') {
-        dockerImage = docker.build('abhinavprakash1992/Devops')
+    stage('Docker Build') {
+    	agent any
+      steps {
+      	sh 'docker build -t abhinavprakash1992/Devops:latest .'
+      }
     }
-    stage('Push image') {
-        dockerImage.push("latest")
-    }
+  }
 }
