@@ -4,17 +4,13 @@ pipeline {
             image 'node:6-alpine'
             args '-p 3000:3000'
         }
+        def dockerHome = tool 'myDocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
     environment { 
         CI = 'true'
     }
     stages {
-        stage('Initialize'){
-            steps{
-                def dockerHome = tool 'myDocker'
-                env.PATH = "${dockerHome}/bin:${env.PATH}"
-            }
-        } 
         stage('Build') {
             steps {
                 sh 'npm install'
