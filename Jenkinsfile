@@ -1,25 +1,10 @@
-pipeline { 
-    agent any 
+pipeline {
+    agent { docker { image 'node:16.17.1-alpine' } }
     stages {
-        stage('Initilize'){
-            steps{
-                script{
-                    def dockerHome = tool 'myDocker'
-                    env.PATH = "${dockerHome}/bin:${env.PATH}"
-                }
+        stage('build') {
+            steps {
+                sh 'node --version'
             }
         }
-        stage('Cloning Git') { 
-            steps { 
-                checkout scm
-            }
-        } 
-        stage('Building image') { 
-            steps { 
-                script { 
-                    dockerImage = docker.build('latest') 
-                }
-            } 
-        }     
     }
 }
