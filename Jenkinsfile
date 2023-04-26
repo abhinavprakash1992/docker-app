@@ -1,5 +1,6 @@
 pipeline { 
     agent any 
+    stages {
         stage('Cloning Git') { 
             steps { 
                 checkout scm
@@ -11,5 +12,6 @@ pipeline {
                     dockerImage = docker.build registry + ":latest" 
                 }
             } 
-        }
+        }     
     }
+}
