@@ -1,21 +1,13 @@
 node {
-    def app
-
     stage('Clone repository') {
         checkout scm
     }
-
     stage('Build image') {
-        app = docker.build('abhinavprakash1992/Devops')
-    }
-    stage('Test image') {
-        app.inside{
-            sh 'echo "Tests passed"'
-        }
+        dockerImage = docker.build('abhinavprakash1992/Devops')
     }
     stage('Push image') {
-        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials'){
-            app.push("latest")
+        withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials'){
+        dockerImage.push("latest")
         }
     }
 }
