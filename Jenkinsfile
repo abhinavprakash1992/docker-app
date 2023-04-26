@@ -1,14 +1,26 @@
-node {
-    def app
-    stage('Initialize'){
+pipeline { 
+    environment { 
+        registry = "jpolara2016/test_app" 
+        registryCredential = 'dockerhub_id' 
+        dockerImage = '' 
+    }
+    agent any 
+    stages {
+        stage('Initialize'){
         def dockerHome = tool 'myDocker'
         env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
-    stage('Clone repository') {
-        checkout scm
-    }
-
-    stage('Build image') {
-        app = docker.build('abhinavprakash1992/Devops')
+        stage('Cloning Git') { 
+            steps { 
+                checkout scm
+            }
+        } 
+        stage('Building image') { 
+            steps { 
+                script { 
+                    dockerImage = docker.build registry + ":latest" 
+                }
+            } 
+        }
     }
 }
