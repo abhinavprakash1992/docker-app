@@ -1,31 +1,26 @@
-pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
+node {
+    def app
+    stage('Initialize'){
+        def dockerHome = tool 'myDocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+    }
+    stage('Clone repository') {
+        checkout scm
+    }
+
+    stage('Build image') {
+        app = docker.build('abhinavprakash1992/Devops')
+    }
+    stage('Test image') {
+        app.inside{
+            sh 'echo "Tests passed"'
         }
     }
-    environment { 
-        CI = 'true'
-    }
-    stages {
-        stage('Initialize'){
-          steps {
-             def dockerHome = tool 'myDocker'
-             env.PATH = "${dockerHome}/bin:${env.PATH}"
-          }
-        } 
-        stage('Build') {
-            steps {
-                sh 'npm install'
-            }
-        }
-        stage('Deliver') { 
-            steps {
-                sh './jenkins/scripts/deliver.sh' 
-                input message: 'Finished using the web site? (Click "Proceed" to continue)' 
-                sh './jenkins/scripts/kill.sh' 
-            }
+
+    stage('Push image'){
+        docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-credentials'){
+            app.push("${env.BUILD_NUMBER}")
+            app.push("latest")
         }
     }
 }
