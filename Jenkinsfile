@@ -1,20 +1,9 @@
-pipeline {
-	agent none  stages {
-  	stage('Maven Install') {
-    	agent {
-      	docker {
-        	image 'maven:3.5.0'
-        }
-      }
-      steps {
-      	sh 'mvn clean install'
-      }
+node {
+    checkout scm
+
+    def customImage = docker.build("my-image:${env.BUILD_ID}")
+
+    customImage.inside {
+        sh 'make test'
     }
-    stage('Docker Build') {
-    	agent any
-      steps {
-      	sh 'docker build -t abhinavprakash1992/Devops:latest .'
-      }
-    }
-  }
 }
