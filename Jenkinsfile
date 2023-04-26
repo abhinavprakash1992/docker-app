@@ -1,9 +1,4 @@
 pipeline { 
-    environment { 
-        registry = "abhinavprakash1992/Devops" 
-        registryCredential = 'dockerhub_id' 
-        dockerImage = '' 
-    }
     agent any 
     stages {
         stage('Initilize'){
@@ -22,7 +17,7 @@ pipeline {
         stage('Building image') { 
             steps { 
                 script { 
-                    dockerImage = docker.build registry + ":latest" 
+                    dockerImage = docker.build('latest') 
                 }
             } 
         }     
