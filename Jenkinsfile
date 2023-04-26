@@ -1,11 +1,14 @@
-pipeline {
-    agent { docker { image 'maven:3.3.3' } }
-      stages {
-        stage('log version info') {
-      steps {
-        sh 'mvn --version'
-        sh 'mvn clean install'
-      }
+node {
+    def app
+    stage('Initialize'){
+        def dockerHome = tool 'myDocker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
     }
-  }
+    stage('Clone repository') {
+        checkout scm
+    }
+
+    stage('Build image') {
+        app = docker.build('abhinavprakash1992/Devops')
+    }
 }
