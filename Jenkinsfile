@@ -5,14 +5,18 @@ pipeline {
             args '-p 3000:3000'
         }
     }
-    agent{
-        def dockerHome = tool 'myDocker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
     environment { 
         CI = 'true'
     }
     stages {
+        stage('Initialize'){
+          steps {
+             def dockerHome = tool 'myDocker'
+          }
+          steps {
+            env.PATH = "${dockerHome}/bin:${env.PATH}"
+          }
+        } 
         stage('Build') {
             steps {
                 sh 'npm install'
