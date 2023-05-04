@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: samplejs
+  name: samplejs
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: samplejs
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: samplejs
+    spec:
+      containers:
+        - image: samplejs-build:latest
+          name: samplejs-build
+          imagePullPolicy: Never
+          resources:
+            limits:
+              cpu: 0.5
+              memory: 300M
+            requests:
+              cpu: 0.5
+              memory: 300M
+          ports:
+            - containerPort: 3000
