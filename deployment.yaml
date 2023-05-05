@@ -17,9 +17,8 @@ spec:
         app: samplejs
     spec:
       containers:
-        - image: samplejs-build:latest
+        - image: 691898196447.dkr.ecr.ap-south-1.amazonaws.com/frontend:latest
           name: samplejs-build
-          imagePullPolicy: Never
           resources:
             limits:
               cpu: 0.5
