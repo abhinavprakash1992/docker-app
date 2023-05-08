@@ -5,21 +5,6 @@ on:
     branches: [main]
 
 jobs:
-  release:
-    environment: Production
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' }}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-      - run: yarn ci
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   publish:
     environment: Production
     concurrency:
@@ -57,10 +42,10 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
           IMAGE_TAG: "latest"
-          
+
         run: |
-        # Build a docker container and push it to ECR 
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        echo "Pushing image to ECR..."
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          # Build a docker container and push it to ECR 
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          echo "Pushing image to ECR..."
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
