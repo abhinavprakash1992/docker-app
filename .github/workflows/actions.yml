@@ -2,13 +2,13 @@ name: docker-app
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   release:
     environment: Production
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/master' }}
+    if: ${{ github.ref == 'refs/heads/main' }}
     steps:
       - uses: actions/checkout@v2
         with:
