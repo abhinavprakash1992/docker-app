@@ -2,23 +2,23 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: samplejs
-  name: samplejs
+    app: docker-app
+  name: docker-app
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: samplejs
+      app: docker-app
   strategy: {}
   template:
     metadata:
       labels:
-        app: samplejs
+        app: docker-app
     spec:
       containers:
         - image: 691898196447.dkr.ecr.ap-south-1.amazonaws.com/frontend:latest
-          name: samplejs-build
+          name: docker-app-build
           resources:
             limits:
               cpu: 0.5
